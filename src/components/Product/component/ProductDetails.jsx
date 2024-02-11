@@ -5,7 +5,7 @@ import { RadioGroup } from "@headlessui/react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { getSelectedProduct } from "../ApiCall";
-import { addTOCard, createAddTOCard } from "@/components/card/ApiCall";
+import { addTOCard, createAddTOCard, getUserAllCard } from "@/components/card/ApiCall";
 import SetColor from "@/components/comman/setColor";
 import IsLoggin from "@/components/isLoggin";
 
@@ -56,6 +56,12 @@ const ProductDetails = () => {
   }
 
   // in server datae will add color high light size etc.
+
+  useEffect(() => {
+    dispatch(getUserAllCard());
+  }, [handelSubmit,dispatch]);
+
+
   return (
     <IsLoggin>
       <div>

@@ -12,7 +12,14 @@ const Logout = () => {
       dispatch(logoutAyc());
     }
     !user && router.push("/loginPage");
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      router.push("/loginPage");
+    }
+  }, [dispatch]);
+
   return <div>Logout</div>;
 };
 

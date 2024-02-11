@@ -14,13 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Protected from "../protected/Protected";
 import { setSearchText } from "../Product/ProductSclice";
+import { getUserAllCard } from "../card/ApiCall";
+import { BsDisplayport } from "react-icons/bs";
 const Navbar = ({ children }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.User);
 
   const router = useRouter();
-
-
 
   const navigation = [
     {
@@ -33,7 +33,7 @@ const Navbar = ({ children }) => {
       name: "Oder ",
       href: "/admin/AdminOrder",
       current: false,
-      role: ["user", "admin"],
+      role: ["admin"],
     },
   ];
   const userNavigation = [
@@ -46,7 +46,7 @@ const Navbar = ({ children }) => {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-  
+
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="bg-gray-800">
@@ -126,8 +126,12 @@ const Navbar = ({ children }) => {
                           <span className="absolute -inset-1.5" />
                           <span className="sr-only">Open user menu</span>
                           <img
-                            className="h-8 w-8 rounded-full"
-                            src={user?.imageUrl}
+                            className="h-10 w-10 rounded-full"
+                            src={
+                              user?.image
+                                ? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${user.image}`
+                                : "./placeholder.webp"
+                            }
                             alt=""
                           />
                         </Menu.Button>
@@ -201,7 +205,11 @@ const Navbar = ({ children }) => {
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src={user?.imageUrl}
+                      src={
+                        user?.image
+                          ? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${user.image}`
+                          : "./placeholder.webp"
+                      }
                       alt=""
                     />
                   </div>

@@ -1,0 +1,8 @@
+# Ignore Node.js modules
+node_modules/
+
+# Ignore build directories
+/.next/
+
+# Ignore environment variables file (if any)
+.env

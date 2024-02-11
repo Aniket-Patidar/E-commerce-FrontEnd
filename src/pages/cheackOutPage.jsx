@@ -21,10 +21,10 @@ const CheackOutPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  useEffect(() => {
-    // add user id letter
-    dispatch(getUserAllCard(user?.id));
-  }, [removeItem, handelUpdate]);
+  // TODO
+  // useEffect(() => {
+  //   dispatch(getUserAllCard(user?.id));
+  // }, [removeItem, handelUpdate]);
 
   const totalItem = items.reduce((accumulator, currentValue) => {
     return accumulator + 1 * currentValue.quantity;
@@ -33,13 +33,6 @@ const CheackOutPage = () => {
     // multiply quentiy in price
     return accumulator + currentValue.quantity * currentValue.product.price;
   }, 0);
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/loginPage");
-    }
-    dispatch(getUserAllCard(user.id));
-  }, []);
 
   function handelRemover(e, item) {
     e.preventDefault();
@@ -97,6 +90,17 @@ const CheackOutPage = () => {
   // function handelAddressRemove(e, address) {
   //   console.log(address, "address");
   // }
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.push("/loginPage");
+  //   }
+  //   if (user) {
+  //     dispatch(getUserAllCard());
+  //   }
+  // }, [dispatch, handelRemover, handelUpdate, router]);
+
+
 
   useEffect(() => {
     !items.length && router.push("/");

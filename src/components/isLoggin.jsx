@@ -8,6 +8,7 @@ import { getUserInfo } from "./auth/apiCall";
 const IsLoggin = ({ children }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+
   // const { user,  } = useSelector((state) => state.User);
   // const [check, setCheck] = useState(true);
   // useEffect(() => {
@@ -34,15 +35,14 @@ const IsLoggin = ({ children }) => {
   );
 
   useEffect(() => {
-    dispatch(getUserInfo());
+    if (!user) dispatch(getUserInfo());
   }, [LoginUser, user, ischeckUser]);
 
-  // useEffect(()=>{
-
-  //   if(!user && ischeckUser){
-  //     router.push('/loginPage')
-  //   }
-  // },[])
+  useEffect(() => {
+    if (!user && ischeckUser) {
+      router.push("/loginPage");
+    }
+  }, []);
 
   return (
     <>

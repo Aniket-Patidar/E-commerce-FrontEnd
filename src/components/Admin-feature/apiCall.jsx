@@ -13,7 +13,7 @@ const {
 export const getAllProducts = (data) => async (dispatch, getState) => {
   try {
     const { data } = await axios.get(
-      "http://localhost:8080/products?user=" + 1
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products?user=` + 1
     );
     dispatch(setProduct(data));
   } catch (err) {
@@ -43,7 +43,10 @@ export const getFilterProduct =
       /* TODO : need to fixed the id */
       var id = 1;
       const res = await axios.get(
-        "http://localhost:8080/products?user=" + id + "&" + queryStr
+        `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products?user=` +
+          id +
+          "&" +
+          queryStr
       );
 
       const totalItems = await res.headers.get("X-Total-Count");
@@ -53,29 +56,35 @@ export const getFilterProduct =
     }
   };
 
-  // setCategories
-  export const getAllCategories = () => async (dispatch, getState) => {
-    try {
-      const res = await axios.get("http://localhost:8080/categories");
-      dispatch(setCategories(res.data));
-    } catch (err) {
-      console.log(err, "Error");
-    }
-  };
+// setCategories
+export const getAllCategories = () => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/categories`
+    );
+    dispatch(setCategories(res.data));
+  } catch (err) {
+    console.log(err, "Error");
+  }
+};
 
-  // getAllBrands
-  export const getAllBrands = () => async (dispatch, getState) => {
-    try {
-      const res = await axios.get("http://localhost:8080/brands");
-      dispatch(setBrands(res.data));
-    } catch (err) {
-      console.log(err, "Error");
-    }
-  };
+// getAllBrands
+export const getAllBrands = () => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/brands`
+    );
+    dispatch(setBrands(res.data));
+  } catch (err) {
+    console.log(err, "Error");
+  }
+};
 
 export const getSelectedProduct = (id) => async (dispatch, getState) => {
   try {
-    const res = await axios.get("http://localhost:8080/products/" + id);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products/` + id
+    );
 
     dispatch(setProduct(res.data));
   } catch (err) {
@@ -85,7 +94,9 @@ export const getSelectedProduct = (id) => async (dispatch, getState) => {
 
 export const deleteProduct = (id) => async (dispatch, getState) => {
   try {
-    const { data } = await axios.delete("http://localhost:8080/products/" + id);
+    const { data } = await axios.delete(
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products/` + id
+    );
 
     console.log(data);
   } catch (err) {
@@ -96,7 +107,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 export const createProduct = (data) => async (dispatch, getState) => {
   try {
     const product = await axios.post(
-      "http://localhost:8080/products",
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products`,
       { ...data },
       {
         headers: { "content-type": "application/json" },
@@ -114,7 +125,7 @@ export const createProduct = (data) => async (dispatch, getState) => {
 export const getSingleProduct = (productId) => async (dispatch, getState) => {
   try {
     const { data } = await axios.get(
-      "http://localhost:8080/products/" + productId
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products/` + productId
     );
     dispatch(setSingleProduct(data));
   } catch (err) {
@@ -125,7 +136,8 @@ export const getSingleProduct = (productId) => async (dispatch, getState) => {
 export const updateProduct = (productDetails) => async (dispatch, getState) => {
   try {
     const { data } = await axios.patch(
-      "http://localhost:8080/products/" + productDetails.id,
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products/` +
+        productDetails.id,
       { ...productDetails },
       {
         headers: { "content-type": "application/json" },
@@ -159,7 +171,9 @@ export const getAllOrder =
     }
 
     try {
-      const res = await axios.get("http://localhost:8080/admin?" + queryStr);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/admin?` + queryStr
+      );
       const totalItems = await res.headers.get("X-Total-Count");
       dispatch(setOrderProduct({ data: res.data, totalItems: totalItems }));
     } catch (err) {
@@ -170,7 +184,7 @@ export const getAllOrder =
 export const EditOrder = (id, status) => async (dispatch, getState) => {
   try {
     const { data } = await axios.patch(
-      "http://localhost:8080/admin/" + id,
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/admin/` + id,
       { status: status },
       {
         headers: { "content-type": "application/json" },

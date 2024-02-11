@@ -15,9 +15,12 @@ const MyOrder = () => {
     dispatch(AycGetAllOrder(user?.id));
   }, []);
 
+
+
   return (
     <>
-      <ul className="space-y-1">
+      <Link href="/" className="px-2 py-2 font-semibold">Home</Link>
+      <ul className="space-y-1 px-[100px] py-[10px]">
         {orders.map((order) => {
           return (
             <>

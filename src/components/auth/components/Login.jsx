@@ -22,16 +22,21 @@ const Login = () => {
 
   useEffect(() => {
     if (LoginUser) {
-      dispatch(getUserInfo());
+      if (!user) dispatch(getUserInfo());
     }
+
   }, [onSubmit, LoginUser]);
 
   useEffect(() => {
-    if (user || LoginUser) {
-      router.push("/");
+    if (!user) {
+      dispatch(getUserInfo());
     }
-  }, [user, LoginUser]);
+    if (localStorage.getItem("token") && user) {
+      router.replace("/");
+    }
+  }, [user]);
 
+  
   return (
     <div>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -100,11 +105,11 @@ const Login = () => {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("password", {
                     required: "password is required",
-                    pattern: {
-                      value:
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,25}$/,
-                      message: "please enter valid password",
-                    },
+                    // pattern: {
+                    //   value:
+                    //     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,25}$/,
+                    //   message: "please enter valid password",
+                    // },
                   })}
                 />
                 {errors?.password && (

@@ -23,7 +23,6 @@ import {
 } from "../apiCall";
 import { ITEMS_PER_PAGE } from "../../../../utils/const";
 import { useRouter } from "next/router";
-import { getUserAllCard } from "@/components/card/ApiCall";
 import Navbar from "@/components/Navbar/Navbar";
 import { setUserInfo } from "@/components/auth/userSclice";
 
@@ -108,10 +107,9 @@ const ProductList = () => {
     dispatch(getAllCategories());
     dispatch(getAllBrands());
   }, []);
-  /* get all cards */
-  useEffect(() => {
-    dispatch(getUserAllCard(user?.id));
-  }, [user?.id]);
+
+  
+
 
   useEffect(() => {
     dispatch(getFilterProduct());

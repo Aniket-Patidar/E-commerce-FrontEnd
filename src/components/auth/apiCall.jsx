@@ -10,24 +10,23 @@ const {
   SetUserProfileError,
 } = require("./userSclice");
 
-export const createUser = (data) => async (dispatch, getState) => {
+
+const basePath = process.env.NEXT_PUBLIC_REACT_APP_API_URL
+
+export const createUser = (userInfo) => async (dispatch, getState) => {
   try {
-    const res = await axios.post(
-      "http://localhost:8080/auth/signup",
-      { ...data },
+    const { data } = await axios.post(
+      `${basePath}/auth/signup`,
+      { ...userInfo },
       {
         headers: { "content-type": "application/json" },
       }
     );
-
-    console.log(res.data);
-    if (res.data.success) {
-      dispatch(setUser(res.data.user));
-    } else {
-      dispatch(setError(res.data.msg));
-    }
-    // cheack user data type
+    console.log(data, "===");
+    localStorage.setItem("token", data.token);
+    dispatch(setUser(data.user));
   } catch (err) {
+    console.log(err);
     dispatch(setError("please enter correct data"));
   }
 };
@@ -35,13 +34,13 @@ export const createUser = (data) => async (dispatch, getState) => {
 export const loginUser = (data) => async (dispatch, getState) => {
   try {
     const res = await axios.post(
-      "http://localhost:8080/auth/login",
+      `${basePath}/auth/login`,
       { ...data },
       {
         headers: { "content-type": "application/json" },
       }
     );
-    console.log(res, "res");
+    localStorage.setItem("token", res.data.token);
     if (res.data.user.id) {
       dispatch(setLoginUser(res.data.user));
     } else {
@@ -52,10 +51,13 @@ export const loginUser = (data) => async (dispatch, getState) => {
   }
 };
 
-// check user is logging or not
 export const getUserInfo = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get("http://localhost:8080/auth/userInfo");
+    const res = await axios.get(`${basePath}/auth/userInfo`, {
+      headers: {
+        authorization: `${localStorage.getItem("token")} `,
+      },
+    });
     if (res.data.user.id) {
       dispatch(setUserInfo(res.data.user));
     } else {
@@ -71,9 +73,14 @@ export const getUserInfo = () => async (dispatch, getState) => {
 export const userAddressUpdate = (address) => async (dispatch, getState) => {
   try {
     const res = await axios.patch(
-      "http://localhost:8080/users",
+      `${basePath}/users`,
       { ...address },
-      { headers: { "content-type": "application/json" } }
+      {
+        headers: {
+          "content-type": "application/json",
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
     );
     dispatch(setUser(res.data));
   } catch (err) {
@@ -84,9 +91,14 @@ export const userAddressUpdate = (address) => async (dispatch, getState) => {
 export const removeAddress = (address) => async (dispatch, getState) => {
   try {
     const res = await axios.patch(
-      "http://localhost:8080/users/removeAddress",
+      `${basePath}/users/removeAddress`,
       { ...address },
-      { headers: { "content-type": "application/json" } }
+      {
+        headers: {
+          "content-type": "application/json",
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
     );
     dispatch(setUser(res.data));
   } catch (err) {
@@ -96,22 +108,29 @@ export const removeAddress = (address) => async (dispatch, getState) => {
 
 export const logoutAyc = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get("http://localhost:8080/auth/logout");
-    console.log(res, "logout");
-    // dispatch(setUser());
+    const res = await axios.get(`${basePath}/auth/logout`, {
+      headers: {
+        "content-type": "application/json",
+        authorization: `${localStorage.getItem("token")}`,
+      },
+    });
+    localStorage.removeItem("token");
+    dispatch(setUser(""));
   } catch (err) {
     console.log(err, "err ");
   }
 };
 
-/* forget Password */
 export const sendMail = (data) => async (dispatch, getState) => {
   try {
     const res = await axios.post(
-      "http://localhost:8080/auth/reset-password-request",
+      `${basePath}/auth/reset-password-request`,
       { ...data },
       {
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `${localStorage.getItem("token")}`,
+        },
       }
     );
     dispatch(setSendEmil(true));
@@ -124,10 +143,13 @@ export const sendMail = (data) => async (dispatch, getState) => {
 export const resetPassword = (data) => async (dispatch, getState) => {
   try {
     const res = await axios.post(
-      "http://localhost:8080/auth/reset-password",
+      `${basePath}/auth/reset-password`,
       { ...data },
       {
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `${localStorage.getItem("token")}`,
+        },
       }
     );
     console.log(res, "resetpASS");
@@ -137,14 +159,13 @@ export const resetPassword = (data) => async (dispatch, getState) => {
 };
 
 export const uploadImage = (data) => async (dispatch, getState) => {
-  console.log(data, "data");
   try {
     const res = await axios.post(
-      "http://localhost:8080/users/image",
-      { data },
+      `${basePath}/users/image`,
+       data ,
       {
         headers: {
-          "content-type": "multipart/form-data",
+          authorization: `${localStorage.getItem("token")}`,
         },
       }
     );
@@ -155,18 +176,18 @@ export const uploadImage = (data) => async (dispatch, getState) => {
   }
 };
 
-/* update Profile */
-
 export const updateProfile = (data) => async (dispatch, getState) => {
   try {
     const res = await axios.post(
-      "http://localhost:8080/users/ProfileUpdate",
-      { ...data }
-      // {
-      //   headers: { "content-type": "application/json" },
-      // }
+      `${basePath}/users/ProfileUpdate`,
+      { ...data },
+      {
+        headers: {
+          "content-type": "application/json",
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
     );
-    // console.log(res, "done");
   } catch (err) {
     console.log(err);
     if (err?.response?.data?.codeName == "DuplicateKey") {

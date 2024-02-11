@@ -6,9 +6,10 @@ const {
   setProducts,
 } = require("./ProductSclice");
 
+const baseUrl = process.env.NEXT_PUBLIC_REACT_APP_API_URL;
 export const getAllProducts = (data) => async (dispatch, getState) => {
   try {
-    const { data } = await axios.get("http://localhost:8080/products");
+    const { data } = await axios.get(`${baseUrl}/products`);
     dispatch(setProduct(data));
   } catch (err) {
     console.log(err, "Error");
@@ -37,7 +38,7 @@ export const getFilterProduct =
     }
 
     try {
-      const res = await axios.get("http://localhost:8080/products?" + queryStr);
+      const res = await axios.get(`${baseUrl}/products?` + queryStr);
       const totalItems = await res.headers.get("X-Total-Count");
       dispatch(setProducts({ data: { allProducts: res.data, totalItems } }));
     } catch (err) {
@@ -48,7 +49,7 @@ export const getFilterProduct =
 // setCategories
 export const getAllCategories = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get("http://localhost:8080/categories");
+    const res = await axios.get(`${baseUrl}/categories`);
     dispatch(setCategories(res.data.msg));
   } catch (err) {
     console.log(err, "Error");
@@ -58,7 +59,7 @@ export const getAllCategories = () => async (dispatch, getState) => {
 // getAllBrands
 export const getAllBrands = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get("http://localhost:8080/brands");
+    const res = await axios.get(`${baseUrl}/brands`);
     dispatch(setBrands(res.data.msg));
   } catch (err) {
     console.log(err, "Error");
@@ -67,7 +68,7 @@ export const getAllBrands = () => async (dispatch, getState) => {
 
 export const getSelectedProduct = (id) => async (dispatch, getState) => {
   try {
-    const res = await axios.get("http://localhost:8080/products/" + id);
+    const res = await axios.get(`${baseUrl}/products/` + id);
 
     dispatch(setProduct(res.data));
   } catch (err) {

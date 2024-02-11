@@ -15,9 +15,13 @@ const Card = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  useEffect(() => {
-    dispatch(getUserAllCard(user?.id));
-  }, [removeItem, handelUpdate, user]);
+  
+  // TODO
+  // useEffect(() => {
+  //   if (user) {
+  //     dispatch(getUserAllCard(user?.id));
+  //   }
+  // }, [removeItem, handelUpdate]);
 
   const totalItem = items.reduce((accumulator, currentValue) => {
     return accumulator + 1 * currentValue.quantity;
@@ -45,6 +49,12 @@ const Card = () => {
   useEffect(() => {
     !items.length && router.push("/");
   }, [handelRemover]);
+
+
+  useEffect(() => {
+    dispatch(getUserAllCard());
+  }, [handelUpdate,dispatch]);
+
 
   return (
     <IsLoggin>

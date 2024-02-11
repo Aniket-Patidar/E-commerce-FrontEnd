@@ -98,50 +98,39 @@ const Profile = () => {
     setValue("index", index);
   }
 
-  const [Image, setImage] = useState();
   function handelCreateAddress() {
     setEditForm(!editForm);
     setCreateAddress(true);
     reset();
   }
 
-  const fileInput = useRef();
-  const btn = useRef();
+  /* Image */
+  const ref = useRef();
 
-  function handelSelectImg(e) {
-    fileInput.current.click();
-  }
-
-  function handelChange(e) {
-    console.log(e.target.files[0]);
-    setImage(e.target.files[0]);
-      btn.current.click();
-  }
-  // const formData = new FormData();
-  // formData.append("avatar", file);
-  // console.log(formData, file);
-  // const { data } = await axios.post(
-  //   "http://localhost:8080/api/auth/uploadImg",
-  //   formData
-  // );
-
-
- async function handelImgSubmit(e) {
-    e.preventDefault();
+  function handleChange(e) {
+    const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("avatar", Image);
-    // dispatch(uploadImage(formData));
-    const data = await axios.post(
-        "http://localhost:8080/users/image",
-        formData
-      );
-      console.log(data,"uploded");
+    formData.append("image", file);
+    dispatch(uploadImage(formData));
+    dispatch(getUserInfo());
+  }
+  function handelClickOnImage() {
+    ref.current.click();
+    dispatch(getUserInfo());
   }
 
   return (
     <>
       {user ? (
         <div>
+          <input
+            className="hidden"
+            name="avatar"
+            ref={ref}
+            onChange={handleChange}
+            type="file"
+          />
+
           <div className={`  text-black min-h-screen p-10 relative  `}>
             {Model && (
               <div className="absolute -translate-x-[50%] -translate-y-[50%] top-[35%] left-[50%]">
@@ -195,40 +184,24 @@ const Profile = () => {
                       placeholder="Phone No"
                       value={user.phoneNo}
                     />
-                    <button
-                      onClick={handelProfile}
-                      className="bg-green-500 text-white py-2  rounded-3xl"
-                    >
-                      Save
-                    </button>
                   </div>
                 </div>
               </div>
             )}
-            <div /* className={`${Model && "opacity-10 w-[80vh]"}`} */>
-              <div className={`flex  rounded-full overflow-hidden `}>
-                <div onClick={handelSelectImg}>
+            <div>
+              <div className={`flex md:flex-row flex-col`}>
+                <div className="w-[120px] h-[120px] overflow-hidden  rounded-full m-2">
                   <img
-                    className="mr-6 rounded-full"
-                    src="https://placekitten.com/g/200/200"
+                    onClick={handelClickOnImage}
+                    className="mr-6 rounded-full w-[120px] h-[120px] object-cover object-center"
+                    src={
+                      user.image
+                        ? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${user.image}`
+                        : "./placeholder.webp"
+                    }
                   />
                 </div>
 
-                <form
-                  className="hidden"
-                  enctype="multipart/form-data"
-                  onSubmit={handelImgSubmit}
-                >
-                  <input
-                    onChange={handelChange}
-                    ref={fileInput}
-                    type="file"
-                    name="avatar"
-                  ></input>
-                  <button type="submit" ref={btn}>
-                    btn
-                  </button>
-                </form>
                 <div className="flex flex-col justify-center">
                   <h1 className="mt-0 mb-2 text-black text-4xl">
                     {user?.name}

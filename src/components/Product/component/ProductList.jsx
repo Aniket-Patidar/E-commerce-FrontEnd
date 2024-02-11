@@ -21,17 +21,17 @@ import {
 } from "../ApiCall";
 import { ITEMS_PER_PAGE } from "../../../../utils/const";
 import { useRouter } from "next/router";
-import { getUserAllCard } from "@/components/card/ApiCall";
 import { GridLoader } from "react-spinners";
 import { setUserInfo } from "@/components/auth/userSclice";
 import IsLoggin from "@/components/isLoggin";
+import { getUserAllCard } from "@/components/card/ApiCall";
 
 const ProductList = () => {
   const { products, totalItems, categories, brands, searchText } = useSelector(
     (state) => state.Product
   );
 
-  const {} = useSelector((state) => state.Card);
+  const { AllCard } = useSelector((state) => state.Card);
 
   const router = useRouter();
   const { user, ischeckUser } = useSelector((state) => state.User);
@@ -39,6 +39,10 @@ const ProductList = () => {
   const [filterValue, setFilterValue] = useState({});
   const [sort, setSort] = useState({});
   const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    dispatch(getUserAllCard());
+  }, []);
 
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
@@ -138,13 +142,6 @@ const ProductList = () => {
       location: "Remote",
     },
   ];
-
-  /* get all cards */
-  useEffect(() => {
-    if (user?.id) {
-      dispatch(getUserAllCard());
-    }
-  }, [user]);
 
   return (
     <IsLoggin>

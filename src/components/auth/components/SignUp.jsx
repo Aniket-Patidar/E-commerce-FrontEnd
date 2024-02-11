@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser } from "../apiCall";
+import { createUser, getUserInfo } from "../apiCall";
 import { useRouter } from "next/router";
 
 const SignUp = () => {
@@ -13,7 +13,7 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const { user ,error} = useSelector((state) => state.User);
+  const { user, error } = useSelector((state) => state.User);
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -22,7 +22,10 @@ const SignUp = () => {
   });
 
   useEffect(() => {
-    if (user) {
+    if (!user) {
+      dispatch(getUserInfo());
+    }
+    if (localStorage.getItem("token") && user) {
       router.replace("/");
     }
   }, [user]);
@@ -88,11 +91,11 @@ const SignUp = () => {
                   type="password"
                   {...register("password", {
                     required: "password is required",
-                    pattern: {
-                      value:
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,25}$/,
-                      message: "please enter valid password",
-                    },
+                    // pattern: {
+                    //   value:
+                    //     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,25}$/,
+                    //   message: "please enter valid password",
+                    // },
                   })}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
