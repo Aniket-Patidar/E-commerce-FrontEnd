@@ -83,7 +83,7 @@ const OderList = () => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600 text-sm font-light">
-                  {OrderProduct.map((order, index) => {
+                  {OrderProduct && OrderProduct.map((order, index) => {
                     return (
                       <>
                         <tr className="border-b border-gray-200 hover:bg-gray-100">
