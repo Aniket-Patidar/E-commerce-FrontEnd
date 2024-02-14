@@ -9,27 +9,34 @@ import {
   getUserAllCard,
   removeItem,
   removeAllCard,
+  updateItem,
 } from "@/components/card/ApiCall";
 import { useForm } from "react-hook-form";
 import { AycSetOrder } from "@/components/order/apiCall";
 import { userAddressUpdate } from "@/components/auth/apiCall";
+import Card from "@/components/card/Card";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CheackOutPage = () => {
   const [open, setOpen] = useState(true);
-  const { AllCard: items } = useSelector((state) => state.Card);
+  const { allCard: items } = useSelector((state) => state.Card);
   const { user } = useSelector((state) => state.User);
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // TODO
-  // useEffect(() => {
-  //   dispatch(getUserAllCard(user?.id));
-  // }, [removeItem, handelUpdate]);
+  function handelUpdate(type, item) {
+    if (type == "add" && item.quantity < item.product.stock)
+      dispatch(updateItem({ quantity: item.quantity + 1 }, { id: item.id }));
+    if (type == "sub" && item.quantity > 1)
+      dispatch(updateItem({ quantity: item.quantity - 1 }, { id: item.id }));
+  }
 
-  const totalItem = items.reduce((accumulator, currentValue) => {
+  const totalItem = items?.reduce((accumulator, currentValue) => {
     return accumulator + 1 * currentValue.quantity;
   }, 0);
-  const totalPrice = items.reduce((accumulator, currentValue) => {
+  const totalPrice = items?.reduce((accumulator, currentValue) => {
     // multiply quentiy in price
     return accumulator + currentValue.quantity * currentValue.product.price;
   }, 0);
@@ -39,9 +46,9 @@ const CheackOutPage = () => {
     dispatch(removeItem(item.id));
   }
   /* handel update qty */
-  function handelUpdate(e, item) {
-    dispatch(updateItem({ ...item, quantity: e.target.value }));
-  }
+  // function handelUpdate(e, item) {
+  //   dispatch(updateItem({ ...item, quantity: e.target.value }));
+  // }
 
   /* handel form */
   const {
@@ -64,7 +71,7 @@ const CheackOutPage = () => {
   /* handelOrder */
   function handelOrder(e) {
     if (!Address) {
-      alert("please select address");
+      toast.error("please select address");
     }
 
     if (Address) {
@@ -86,25 +93,9 @@ const CheackOutPage = () => {
     }
   }
 
-  /* handel remove address */
-  // function handelAddressRemove(e, address) {
-  //   console.log(address, "address");
-  // }
-
   // useEffect(() => {
-  //   if (!user) {
-  //     router.push("/loginPage");
-  //   }
-  //   if (user) {
-  //     dispatch(getUserAllCard());
-  //   }
-  // }, [dispatch, handelRemover, handelUpdate, router]);
-
-
-
-  useEffect(() => {
-    !items.length && router.push("/");
-  }, [handelRemover]);
+  //   !items?.length && router.push("/");
+  // }, [handelRemover]);
 
   return (
     <>
@@ -459,7 +450,7 @@ const CheackOutPage = () => {
                     <h1 class="text-4xl font-bold tracking-tight text-gray-900 p-4">
                       Card
                     </h1>
-                    {items.map((product) => (
+                    {items?.map((product) => (
                       <li key={product.id} className="flex py-6">
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <img
@@ -486,24 +477,38 @@ const CheackOutPage = () => {
                           </div>
                           <h1>{}</h1>
                           <div className="flex flex-1 items-end justify-between text-sm">
-                            <div className="text-gray-500">
-                              <label
-                                htmlFor="quentity"
-                                className="inline-block mr-5 text-sm font-medium leading-6 text-gray-900"
-                              >
-                                Qty :{product?.quantity}
-                              </label>
-                              <select
-                                value={product?.quantity}
-                                name=""
-                                onChange={(e) => handelUpdate(e, product)}
-                                id=""
-                              >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                              </select>
-                            </div>
+                            <label
+                              htmlFor="quentity"
+                              className="inline-block mr-5 text-sm font-medium leading-6 text-gray-900"
+                            >
+                              <div className="flex flex-1 items-end justify-between text-sm">
+                                <div className="text-gray-500">
+                                  Qty :
+                                  <label
+                                    htmlFor="quentity"
+                                    className="inline-block mr-5 text-sm font-medium leading-6 text-gray-900"
+                                  ></label>
+                                  <button
+                                    className="p-2 text-2xl"
+                                    onClick={(e) =>
+                                      handelUpdate("add", product)
+                                    }
+                                  >
+                                    +
+                                  </button>
+                                  <span>{product.quantity}</span>
+                                  <button
+                                    className="px-2 text-2xl"
+                                    onClick={(e) =>
+                                      handelUpdate("sub", product)
+                                    }
+                                  >
+                                    -
+                                  </button>
+                                </div>
+                              </div>
+                            </label>
+                            <div className="text-gray-500"></div>
 
                             <div className="flex">
                               <button
@@ -530,9 +535,6 @@ const CheackOutPage = () => {
                   <p className="capitalize">Total Price</p>
                   <p>${totalPrice}</p>
                 </div>
-                {/* <p className="mt-0.5 text-sm text-gray-500">
-          Shipping and taxes calculated at checkout.
-        </p> */}
                 <div className="mt-6">
                   <div
                     onClick={handelOrder}
@@ -561,6 +563,7 @@ const CheackOutPage = () => {
           </div>
         </div>
       </div>
+      <ToastContainer></ToastContainer>
     </>
   );
 };

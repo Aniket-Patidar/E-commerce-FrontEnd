@@ -53,6 +53,7 @@ const ProductList = () => {
     setPage(1);
   }, [totalItems, sort]);
 
+  
   const sortOptions = [
     { name: "Best Rating", sort: "rating", order: "desc", current: false },
     { name: "Price: Low to High", sort: "price", order: "asc", current: false },

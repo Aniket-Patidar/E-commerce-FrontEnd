@@ -14,12 +14,23 @@ const MyOrder = () => {
   useEffect(() => {
     dispatch(AycGetAllOrder(user?.id));
   }, []);
+  console.log(orders);
 
+  function getCurrentDate() {
+    const currentDate = new Date();
 
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
+    const day = currentDate.getDate().toString().padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+}
 
   return (
     <>
-      <Link href="/" className="px-2 py-2 font-semibold">Home</Link>
+      <Navbar></Navbar>
       <ul className="space-y-1 px-[100px] py-[10px]">
         {orders.map((order) => {
           return (
@@ -54,6 +65,7 @@ const MyOrder = () => {
                             <p class="mt-1 text-sm text-gray-500">
                               {items.product.description}
                             </p>
+                            <p className="text-sm">{getCurrentDate(items.updatedAt)}</p>
                           </div>
                           <div class="flex flex-1 items-end justify-between text-sm">
                             <p class="text-gray-500">Qty {items.quantity}</p>
