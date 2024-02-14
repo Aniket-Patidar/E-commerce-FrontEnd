@@ -7,66 +7,85 @@ const {
   setSingleProduct,
   setOrderProduct,
   setOrderStatusUpdate,
+  setError,
+  setLoading
 } = require("./AdminSclice");
 
 /* need to fixed id */
-export const getAllProducts = (data) => async (dispatch, getState) => {
+export const getAllProducts = () => async (dispatch, getState) => {
+  dispatch(setLoading()); // Set loading state to true
   try {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products?user=` + 1
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products?user=1`,
+      {
+        headers: {
+          authorization: `${localStorage.getItem("token")} `,
+          "content-type": "application/json",
+        },
+      }
     );
     dispatch(setProduct(data));
   } catch (err) {
+    dispatch(setError(err.message));
     console.log(err, "Error");
   }
 };
 
-export const getFilterProduct =
-  (filter, sort, pagination) => async (dispatch, getState) => {
-    let queryStr = "";
-    for (let key in filter) {
-      const categoryValue = filter[key];
-      if (categoryValue.length >= 0) {
-        const lastCategoryValue = categoryValue[categoryValue.length - 1];
-        queryStr += `${key}=${lastCategoryValue}&`;
-      }
-    }
-    for (let key in sort) {
-      queryStr += `${key}=${sort[key]}&`;
-    }
 
-    for (let key in pagination) {
-      queryStr += `${key}=${pagination[key]}&`;
-    }
+export const getFilterProduct = (filter, sort, pagination, searchText) => async (dispatch, getState) => {
+  let queryStr = "";
 
-    try {
-      /* TODO : need to fixed the id */
-      var id = 1;
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products?user=` +
-          id +
-          "&" +
-          queryStr
-      );
 
-      const totalItems = await res.headers.get("X-Total-Count");
-      dispatch(setProducts({ data: { allProducts: res.data, totalItems } }));
-    } catch (err) {
-      console.log(err, "Error");
+  for (let key in filter) {
+    const categoryValues = filter[key];
+    if (categoryValues.length > 0) {
+      categoryValues.forEach((value) => {
+        queryStr += `${key}=${value}&`;
+      });
     }
-  };
+  }
+
+  for (let key in sort) {
+    queryStr += `${key}=${sort[key]}&`;
+  }
+  for (let key in pagination) {
+    queryStr += `${key}=${pagination[key]}&`;
+  }
+
+  if (searchText) {
+    queryStr += `search=${searchText}&`;
+  }
+
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/products?` + queryStr);
+    const totalItems = await res.headers.get("X-Total-Count");
+    dispatch(setProducts({ data: { allProducts: res.data, totalItems } }));
+  } catch (err) {
+    console.error("Error fetching filtered products:", err);
+    dispatch(setError(err.message || "Failed to fetch filtered products"));
+  }
+};
 
 // setCategories
 export const getAllCategories = () => async (dispatch, getState) => {
+  dispatch(setLoading());
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/categories`
+    const {data} = await axios.get(
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/categories`,
+      {
+        headers: {
+          authorization: `${localStorage.getItem("token")} `,
+          "content-type": "application/json",
+        },
+      }
     );
-    dispatch(setCategories(res.data));
+    dispatch(setCategories(data.msg));
   } catch (err) {
+    dispatch(setError(err.message));
     console.log(err, "Error");
   }
 };
+
 
 // getAllBrands
 export const getAllBrands = () => async (dispatch, getState) => {

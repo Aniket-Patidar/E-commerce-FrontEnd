@@ -1,21 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-/* admin */
-export const adminProductSclice = createSlice({
-  name: "adminProductSclice",
+
+export const adminProductSlice = createSlice({
+  name: "adminProductSlice",
   initialState: {
     products: [],
     totalItems: 0,
     categories: [],
     brands: [],
-    product: [],
+    product: null, // Changed from array to single object
     productById: {},
-    OrderProduct: [],
-    totalItems: 0,
+    orderProducts: [],
+    orderTotalItems: 0, // Changed variable name for clarity
+    loading: false, // Added loading state
+    error: null, // Added error state
   },
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload.data.allProducts;
       state.totalItems = action.payload.data.totalItems;
+      state.loading = false;
+      state.error = null;
     },
     setCategories: (state, action) => {
       state.categories = action.payload;
@@ -24,25 +28,42 @@ export const adminProductSclice = createSlice({
       state.brands = action.payload;
     },
     setProduct: (state, action) => {
-      state.product = action.payload;
+      state.product = action.payload; // Assuming payload is a single product object
+      state.loading = false;
+      state.error = null;
     },
-    setRemoveProduct: (state, action) => {
-      const index = state.product.findIndex(
-        ({ id }) => id == action.payload.id
-      );
-      state.product.splice(index, 1);
+    removeProduct: (state, action) => {
+      const productId = action.payload.id;
+      state.products = state.products.filter(product => product.id !== productId);
+      state.totalItems--; // Decrement totalItems after removing a product
+      state.loading = false;
+      state.error = null;
     },
-    setSingleProduct: (state, action) => {
-      state.productById = action.payload;
+    setProductById: (state, action) => {
+      state.productById[action.payload.id] = action.payload;
+      state.loading = false;
+      state.error = null;
     },
-    setOrderProduct: (state, action) => {
-      state.OrderProduct = action.payload.data;
-      state.totalItems = action.payload.totalItems;
+    setOrderProducts: (state, action) => {
+      state.orderProducts = action.payload.data;
+      state.orderTotalItems = action.payload.totalItems;
+      state.loading = false;
+      state.error = null;
     },
-    setOrderStatusUpdate: (state, action) => {
-      const data = action.payload;
-      const index = state.OrderProduct.findIndex((e) => e.id == data.id);
-      state.OrderProduct.splice(index, 1, data);
+    updateOrderStatus: (state, action) => {
+      const updatedOrder = action.payload;
+      const index = state.orderProducts.findIndex(order => order.id === updatedOrder.id);
+      state.orderProducts[index] = updatedOrder;
+      state.loading = false;
+      state.error = null;
+    },
+    setLoading: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    setError: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });
@@ -52,8 +73,12 @@ export const {
   setCategories,
   setBrands,
   setProduct,
-  setSingleProduct,
-  setOrderProduct,
-  setOrderStatusUpdate,
-} = adminProductSclice.actions;
-export default adminProductSclice.reducer;
+  removeProduct,
+  setProductById,
+  setOrderProducts,
+  updateOrderStatus,
+  setLoading,
+  setError,
+} = adminProductSlice.actions;
+
+export default adminProductSlice.reducer;

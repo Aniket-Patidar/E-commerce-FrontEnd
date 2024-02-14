@@ -4,6 +4,7 @@ import { useForm, Resolver } from "react-hook-form";
 import { getUserInfo, loginUser } from "../apiCall";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { GridLoader } from "react-spinners";
 const Login = () => {
   const {
     register,
@@ -42,7 +43,7 @@ const Login = () => {
   return (
     <div>
       {loadingUser ? (
-        <div>Loading</div>
+        <div><GridLoader  color="#36d7b7"></GridLoader></div>
       ) : (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">

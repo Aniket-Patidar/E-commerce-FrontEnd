@@ -19,8 +19,7 @@ export const getAllProducts = () => async (dispatch, getState) => {
   }
 };
 
-export const getFilterProduct =
-  (filter, sort, pagination, searchText) => async (dispatch, getState) => {
+export const getFilterProduct = (filter, sort, pagination, searchText) => async (dispatch, getState) => {
     let queryStr = "";
 
 

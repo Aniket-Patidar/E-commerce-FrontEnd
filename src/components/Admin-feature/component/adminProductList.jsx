@@ -21,17 +21,17 @@ import {
   getAllProducts,
   getFilterProduct,
 } from "../apiCall";
-import { ITEMS_PER_PAGE } from "../../../../utils/const";
+
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar/Navbar";
 import { setUserInfo } from "@/components/auth/userSclice";
-
+const ITEMS_PER_PAGE = 10;
 const ProductList = () => {
   const { products, product, totalItems } = useSelector((state) => state.admin);
   const router = useRouter();
   const { user, ischeckUser } = useSelector((state) => state.User);
   const dispatch = useDispatch();
-  const { categories, brands } = useSelector((state) => state.Product);
+  const { categories, brands } = useSelector((state) => state.admin);
 
   const [filterValue, setFilterValue] = useState({});
   const [sort, setSort] = useState({});
@@ -62,12 +62,12 @@ const ProductList = () => {
     {
       id: "category",
       name: "category",
-      options: categories,
+      options:categories,
     },
     {
       id: "brand",
       name: "brand",
-      options: brands,
+      options: [],
     },
   ];
   function classNames(...classes) {
@@ -370,7 +370,7 @@ const ProductList = () => {
                             </h3>
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-4">
-                                {section?.options?.map((option, optionIdx) => (
+                                { section?.options?.map((option, optionIdx) => (
                                   <div
                                     key={option.value}
                                     className="flex items-center"

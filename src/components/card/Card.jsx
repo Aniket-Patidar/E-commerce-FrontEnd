@@ -50,7 +50,7 @@ const Card = () => {
     <IsLoggin>
       {loadingCard ? (
         <div className="w-full h-[80vh] flex items-center justify-center">
-          <GridLoader color="#5C5FDC"></GridLoader>
+          <GridLoader color="#36d7b7"></GridLoader>
         </div>
       ) : (
         <>

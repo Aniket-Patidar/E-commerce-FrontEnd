@@ -23,7 +23,7 @@ const Logout = () => {
 
   return (
     <div className="flex items-center justify-center w-[100vw] h-[100vh]">
-      <GridLoader></GridLoader>
+      <GridLoader color="#36d7b7"></GridLoader>
     </div>
   );
 };
