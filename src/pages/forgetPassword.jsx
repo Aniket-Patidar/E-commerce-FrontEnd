@@ -4,6 +4,10 @@ import { useForm, Resolver } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { sendMail } from "@/components/auth/apiCall";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Login = () => {
   const {
     register,
@@ -11,7 +15,7 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const { user, error, LoginUser, EmailSend } = useSelector(
+  const { user, error, LoginUser, emailSend, loadingUser } = useSelector(
     (state) => state.User
   );
   const router = useRouter();
@@ -20,6 +24,23 @@ const Login = () => {
   const onSubmit = handleSubmit((data) => {
     dispatch(sendMail(data));
   });
+
+  useEffect(() => {
+    if (emailSend == true) {
+      toast.success("check your email");
+    }
+  }, [emailSend]);
+  useEffect(() => {
+    if (error) {
+      toast.success(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (loadingUser) {
+      toast.play("waiting for email...");
+    }
+  }, [loadingUser]);
 
   return (
     <div>
@@ -61,17 +82,6 @@ const Login = () => {
                     {errors?.email.message}
                   </p>
                 )}
-                {error && (
-                  <>
-                    <p className="text-red-500">Error</p>
-                  </>
-                )}
-
-                {EmailSend && (
-                  <>
-                    <p className="text-green-500">email is send</p>
-                  </>
-                )}
               </div>
             </div>
 
@@ -96,6 +106,7 @@ const Login = () => {
           </p>
         </div>
       </div>
+      <ToastContainer></ToastContainer>
     </div>
   );
 };

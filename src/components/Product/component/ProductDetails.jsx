@@ -5,7 +5,11 @@ import { RadioGroup } from "@headlessui/react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { getSelectedProduct } from "../ApiCall";
-import { addTOCard, createAddTOCard, getUserAllCard } from "@/components/card/ApiCall";
+import {
+  addTOCard,
+  createAddTOCard,
+  getUserAllCard,
+} from "@/components/card/ApiCall";
 import SetColor from "@/components/comman/setColor";
 import IsLoggin from "@/components/isLoggin";
 
@@ -59,8 +63,9 @@ const ProductDetails = () => {
 
   useEffect(() => {
     dispatch(getUserAllCard());
-  }, [handelSubmit,dispatch]);
+  }, [handelSubmit, dispatch]);
 
+  console.log(product);
 
   return (
     <IsLoggin>
@@ -178,18 +183,15 @@ const ProductDetails = () => {
                         ))}
                       </div>
                       <p className="sr-only">{product.rating} out of 5 stars</p>
-                      {/* <a href={reviews.href} className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                  {reviews.totalCount} reviews
-                </a> */}
                     </div>
                   </div>
-
+                <p className="sr-only">{product.rating} out of 5 stars</p>
                   <form
                     onSubmit={(e) => handelSubmit(e, product)}
                     className="mt-10"
                   >
                     {/* Colors */}
-                    <div>
+                    {product.color?.length > 0 && <div>
                       <h3 className="text-sm font-medium text-gray-900">
                         Color
                       </h3>
@@ -229,10 +231,10 @@ const ProductDetails = () => {
                           ))}
                         </div>
                       </RadioGroup>
-                    </div>
+                    </div>}
 
                     {/* Sizes */}
-                    <div className="mt-10">
+                    {product.size?.length > 0 && <div className="mt-10">
                       <div className="flex items-center justify-between">
                         <h3 className="text-sm font-medium text-gray-900">
                           Size
@@ -312,7 +314,7 @@ const ProductDetails = () => {
                           ))}
                         </div>
                       </RadioGroup>
-                    </div>
+                    </div>}
 
                     <button
                       // type="submit"

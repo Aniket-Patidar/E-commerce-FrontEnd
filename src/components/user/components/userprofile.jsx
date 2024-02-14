@@ -14,6 +14,9 @@ import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Profile = () => {
   const [editForm, setEditForm] = useState(false);
   const [Model, setModel] = useState(false);
@@ -21,7 +24,7 @@ const Profile = () => {
   const [editProfile, setEditProfile] = useState({});
 
   const [createAddress, setCreateAddress] = useState(false);
-  const { user, error, userProfileError } = useSelector((state) => state.User);
+  const { user, loadingUser,error } = useSelector((state) => state.User);
   const {
     register,
     handleSubmit,
@@ -110,18 +113,21 @@ const Profile = () => {
   function handleChange(e) {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("avatar", file);
     dispatch(uploadImage(formData));
     dispatch(getUserInfo());
   }
   function handelClickOnImage() {
     ref.current.click();
-    dispatch(getUserInfo());
   }
+
+  useEffect(() => {
+    error && toast.error(error);
+  }, [error]);
 
   return (
     <>
-      {user ? (
+      {!loadingUser ? (
         <div>
           <input
             className="hidden"
@@ -184,6 +190,7 @@ const Profile = () => {
                       placeholder="Phone No"
                       value={user.phoneNo}
                     />
+                    <button onClick={handelProfile}>Submit</button>
                   </div>
                 </div>
               </div>
@@ -233,7 +240,6 @@ const Profile = () => {
                   </button>
                 </p>
                 <div>
-                  {/* ........................... */}
                   {editForm && (
                     <form
                       className="bg-white mt-12 px-5 py-10"
@@ -488,11 +494,12 @@ const Profile = () => {
                     <ul role="list" className="divide-y divide-gray-100">
                       {user?.addresses?.map((address, index) => (
                         <li
-                          key={index}
-                          className="flex flex-col sm:flex-row justify-between gap-x-6 py-5"
+                        key={index}
+                        className="flex flex-col sm:flex-row justify-between gap-x-6 py-5"
                         >
                           <div className="flex items-center min-w-0 gap-x-4">
                             <div className="min-w-0 flex-auto">
+                          <h1>{address.firstName} {address.lastName}</h1>
                               <p className="mt-1 truncate text-xs leading-5 text-gray-500">
                                 {address.streetAddress}
                               </p>
@@ -538,6 +545,7 @@ const Profile = () => {
       ) : (
         <div>LOading</div>
       )}
+      <ToastContainer></ToastContainer>
     </>
   );
 };

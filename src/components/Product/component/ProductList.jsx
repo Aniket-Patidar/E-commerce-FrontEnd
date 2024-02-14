@@ -19,7 +19,6 @@ import {
   getAllProducts,
   getFilterProduct,
 } from "../ApiCall";
-import { ITEMS_PER_PAGE } from "../../../../utils/const";
 import { useRouter } from "next/router";
 import { GridLoader } from "react-spinners";
 import { setUserInfo } from "@/components/auth/userSclice";
@@ -31,6 +30,7 @@ const ProductList = () => {
     (state) => state.Product
   );
 
+  const ITEMS_PER_PAGE = 10;
   const { AllCard } = useSelector((state) => state.Card);
 
   const router = useRouter();
@@ -96,6 +96,7 @@ const ProductList = () => {
       const index = newFilter[section].findIndex((el) => el == value);
       newFilter[section].splice(index, 1);
     }
+
     setFilterValue(newFilter);
   }
 

@@ -41,7 +41,7 @@ const Navbar = ({ children }) => {
     { name: "My Order", href: "/myOrder" },
     { name: "Logout", href: "/logout" },
   ];
-  const { myCard, AllCard } = useSelector((state) => state.Card);
+  const { myCard, allCard } = useSelector((state) => state.Card);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -116,7 +116,7 @@ const Navbar = ({ children }) => {
                     </Link>
 
                     <span className="inline-flex items-center rounded-md  mb-5 -ml-3 z-50 bg-red-50  px-1 text-xs font-sm text-red-700 ring-1 ring-inset ring-red-600/10 ">
-                      {AllCard.length ? AllCard.length : ""}
+                      {allCard.length ? allCard.length : ""}
                     </span>
 
                     {/* Profile dropdown */}
@@ -234,9 +234,9 @@ const Navbar = ({ children }) => {
                       />
                     </button>
                   </Link>
-                  {AllCard.length > 0 && (
+                  {allCard.length > 0 && (
                     <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10 mb-4 -ml-2 z-10">
-                      {AllCard.length ? AllCard.length : ""}
+                      {allCard.length ? allCard.length : ""}
                     </span>
                   )}
                 </div>
@@ -246,6 +246,7 @@ const Navbar = ({ children }) => {
                       key={item.name}
                       as="Link"
                       href={item.href}
+                      onClick={() => router.push(`${item.href}`)}
                       className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                     >
                       {item.name}

@@ -2,6 +2,7 @@ import { logoutAyc } from "@/components/auth/apiCall";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { GridLoader } from "react-spinners";
 
 const Logout = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,11 @@ const Logout = () => {
     }
   }, [dispatch]);
 
-  return <div>Logout</div>;
+  return (
+    <div className="flex items-center justify-center w-[100vw] h-[100vh]">
+      <GridLoader></GridLoader>
+    </div>
+  );
 };
 
 export default Logout;

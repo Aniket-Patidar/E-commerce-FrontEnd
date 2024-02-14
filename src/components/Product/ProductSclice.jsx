@@ -1,11 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// const initialState = {
-//   products: [],
-// };
-
-export const ProductSclice = createSlice({
-  name: "ProductSclice",
+export const ProductSlice = createSlice({
+  name: "ProductSlice",
   initialState: {
     products: [],
     totalItems: 0,
@@ -13,24 +9,43 @@ export const ProductSclice = createSlice({
     brands: [],
     searchText: "",
     product: null,
+    loading: false,
+    error: null,
   },
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload.data.allProducts;
       state.totalItems = action.payload.data.totalItems;
+      state.loading = false;
+      state.error = null;
     },
     setCategories: (state, action) => {
       state.categories = action.payload;
+      state.loading = false;
+      state.error = null;
     },
     setBrands: (state, action) => {
       state.brands = action.payload;
+      state.loading = false;
+      state.error = null;
     },
     setProduct: (state, action) => {
       state.product = action.payload;
+      state.loading = false;
+      state.error = null;
     },
     setSearchText: (state, action) => {
-      console.log(setSearchText);
       state.searchText = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+      state.error = null;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
     },
   },
 });
@@ -41,5 +56,7 @@ export const {
   setBrands,
   setProduct,
   setSearchText,
-} = ProductSclice.actions;
-export default ProductSclice.reducer;
+  setLoading,
+  setError,
+} = ProductSlice.actions;
+export default ProductSlice.reducer;

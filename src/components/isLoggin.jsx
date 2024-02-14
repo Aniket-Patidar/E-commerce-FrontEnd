@@ -9,44 +9,24 @@ const IsLoggin = ({ children }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // const { user,  } = useSelector((state) => state.User);
-  // const [check, setCheck] = useState(true);
-  // useEffect(() => {
-  //   dispatch(setUserInfo());
-  //   if (!user && ischeckUser) {
-  //     router.push("/loginPage");
-  //   }
-  //   if (user) {
-  //     console.log(user, ischeckUser, "user");
-  //     setCheck(true);
-  //   }
-  // }, []);
-
-  // console.log();
-  // console.log(user, ischeckUser, "user2");
-
-  // useEffect(() => {
-  //   dispatch(setUserInfo());
-  // }, []);
-  // console.log(user, "user");
-
   const { user, error, LoginUser, ischeckUser } = useSelector(
     (state) => state.User
   );
 
   useEffect(() => {
     if (!user) dispatch(getUserInfo());
-  }, [LoginUser, user, ischeckUser]);
+  }, [user, ischeckUser]);
 
+  
   useEffect(() => {
-    if (!user && ischeckUser) {
+    if (!user) {
       router.push("/loginPage");
     }
   }, []);
 
   return (
     <>
-      {(user || LoginUser) && ischeckUser ? (
+      {user ? (
         <Navbar>{children}</Navbar>
       ) : (
         <>

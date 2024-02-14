@@ -25,14 +25,12 @@ const Login = () => {
     dispatch(resetPassword({ ...data, token }));
   });
 
-  // useEffect(() => {
-  //   if (!error) {
-  //     router.replace("/loginPage");
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (!error) {
+      router.replace("/loginPage");
+    }
+  }, [error]);
 
-  console.log(error);
-  //
 
   return (
     <div>
@@ -104,11 +102,11 @@ const Login = () => {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("password", {
                     required: "password is required",
-                    pattern: {
-                      value:
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,25}$/,
-                      message: "please enter valid password",
-                    },
+                    // pattern: {
+                    //   value:
+                    //     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,25}$/,
+                    //   message: "please enter valid password",
+                    // },
                   })}
                 />
                 {errors?.password && (

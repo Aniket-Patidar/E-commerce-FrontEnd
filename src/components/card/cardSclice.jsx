@@ -4,21 +4,35 @@ export const cardSclice = createSlice({
   name: "cardSclice",
   initialState: {
     myCard: [],
-    AllCard: [],
+    allCard: [],
+    loadingCard: false,
+    error: null, 
   },
   reducers: {
     setMyCard: (state, action) => {
       state.myCard.push(action.payload);
     },
     setAllCard: (state, action) => {
-      state.AllCard = action.payload;
+      state.allCard = action.payload;
     },
     setRemoveItems: (state, action) => {
-      const index = state.AllCard.findIndex((e) => e.id == action.payload);
-      state.AllCard.splice(index, 1);
+      const index = state.allCard.findIndex((e) => e.id === action.payload);
+      state.allCard.splice(index, 1);
+    },
+    setLoadingCard: (state, action) => {
+      state.loadingCard = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
     },
   },
 });
 
-export const { setMyCard, setAllCard, setRemoveItems } = cardSclice.actions;
+export const {
+  setMyCard,
+  setAllCard,
+  setRemoveItems,
+  setLoadingCard,
+  setError,
+} = cardSclice.actions;
 export default cardSclice.reducer;
