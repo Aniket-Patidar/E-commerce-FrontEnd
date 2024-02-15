@@ -13,6 +13,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import { GridLoader } from "react-spinners";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -543,7 +544,10 @@ const Profile = () => {
           </div>
         </div>
       ) : (
-        <div>LOading</div>
+        <div className="w-[100%] h-[100vh] flex items-center justify-center">
+          <GridLoader  color="#36d7b7"></GridLoader>
+
+        </div>
       )}
       <ToastContainer></ToastContainer>
     </>
