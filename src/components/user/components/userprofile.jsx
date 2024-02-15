@@ -25,7 +25,7 @@ const Profile = () => {
   const [editProfile, setEditProfile] = useState({});
 
   const [createAddress, setCreateAddress] = useState(false);
-  const { user, loadingUser,error } = useSelector((state) => state.User);
+  const { user, loadingUser, error } = useSelector((state) => state.User);
   const {
     register,
     handleSubmit,
@@ -149,7 +149,14 @@ const Profile = () => {
                     ></AiOutlineClose>
                   </div>
                   <div className="flex items-center justify-center">
-                    <img className="rounded-full w[10vw]" src="./a.jpg"></img>
+                    <img
+                      className="rounded-full w[10vw]"
+                      src={
+                        user.image
+                          ? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${user.image}`
+                          : "./placeholder.webp"
+                      }
+                    ></img>
                   </div>
                   <div className="flex flex-col space-y-3">
                     <input
@@ -495,12 +502,14 @@ const Profile = () => {
                     <ul role="list" className="divide-y divide-gray-100">
                       {user?.addresses?.map((address, index) => (
                         <li
-                        key={index}
-                        className="flex flex-col sm:flex-row justify-between gap-x-6 py-5"
+                          key={index}
+                          className="flex flex-col sm:flex-row justify-between gap-x-6 py-5"
                         >
                           <div className="flex items-center min-w-0 gap-x-4">
                             <div className="min-w-0 flex-auto">
-                          <h1>{address.firstName} {address.lastName}</h1>
+                              <h1>
+                                {address.firstName} {address.lastName}
+                              </h1>
                               <p className="mt-1 truncate text-xs leading-5 text-gray-500">
                                 {address.streetAddress}
                               </p>
@@ -545,7 +554,7 @@ const Profile = () => {
         </div>
       ) : (
         <div className="w-[100%] h-[100vh] flex items-center justify-center">
-          <GridLoader  color="#36d7b7"></GridLoader>
+          <GridLoader color="#36d7b7"></GridLoader>
         </div>
       )}
       <ToastContainer></ToastContainer>
