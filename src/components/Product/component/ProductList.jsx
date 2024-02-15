@@ -53,7 +53,6 @@ const ProductList = () => {
     setPage(1);
   }, [totalItems, sort]);
 
-  
   const sortOptions = [
     { name: "Best Rating", sort: "rating", order: "desc", current: false },
     { name: "Price: Low to High", sort: "price", order: "asc", current: false },
@@ -486,7 +485,6 @@ const ProductList = () => {
                     </div>
                   ) : (
                     <div className="w-[100vw] h-[100vh] flex items-center justify-center">
-                      {" "}
                       <GridLoader color="#36d7b7" />
                     </div>
                   )}

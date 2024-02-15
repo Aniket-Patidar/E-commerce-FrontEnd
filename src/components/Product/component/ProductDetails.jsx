@@ -12,12 +12,13 @@ import {
 } from "@/components/card/ApiCall";
 import SetColor from "@/components/comman/setColor";
 import IsLoggin from "@/components/isLoggin";
+import { GridLoader } from "react-spinners";
 
 const ProductDetails = () => {
   const { user } = useSelector((state) => state.User);
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const { id } = router.query;
   const { products, product, totalItems, categories, brands } = useSelector(
     (state) => state.Product
   );
@@ -25,8 +26,10 @@ const ProductDetails = () => {
   const highlights = ["lalal", "ram ram", "lalal", "ram ram"];
 
   useEffect(() => {
-    dispatch(getSelectedProduct(router.query.id));
-  }, []);
+    if (id) {
+      dispatch(getSelectedProduct(id));
+    }
+  }, [id]);
 
   const colors = [
     { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },

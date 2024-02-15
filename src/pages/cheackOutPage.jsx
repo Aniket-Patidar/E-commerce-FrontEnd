@@ -93,9 +93,9 @@ const CheackOutPage = () => {
     }
   }
 
-  // useEffect(() => {
-  //   !items?.length && router.push("/");
-  // }, [handelRemover]);
+  useEffect(() => {
+    !items?.length && router.push("/");
+  }, [handelRemover]);
 
   return (
     <>

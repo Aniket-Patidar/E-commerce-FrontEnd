@@ -150,7 +150,7 @@ const Profile = () => {
                   </div>
                   <div className="flex items-center justify-center">
                     <img
-                      className="rounded-full w[10vw]"
+                      className="rounded-full w-[100px] h-[100px]"
                       src={
                         user.image
                           ? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${user.image}`

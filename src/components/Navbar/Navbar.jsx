@@ -16,6 +16,7 @@ import Protected from "../protected/Protected";
 import { setSearchText } from "../Product/ProductSclice";
 import { getUserAllCard } from "../card/ApiCall";
 import { BsDisplayport } from "react-icons/bs";
+import Image from "next/image";
 const Navbar = ({ children }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.User);
@@ -57,10 +58,12 @@ const Navbar = ({ children }) => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <Link href={"/"}>
-                      <img
+                      <Image
+                        width={10}
+                        height={10}
                         className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
+                        src="/ecommerce.png"
+                        alt="logo"
                       />
                     </Link>
                   </div>

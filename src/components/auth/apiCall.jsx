@@ -21,7 +21,7 @@ export const createUser = (userInfo) => async (dispatch, getState) => {
       { ...userInfo },
       { headers: { "content-type": "application/json" } }
     );
-    console.log(data,"===");
+    console.log(data, "===");
     localStorage.setItem("token", data.token);
     dispatch(setUser(data.user));
   } catch (err) {
@@ -110,12 +110,12 @@ export const sendMail = (data) => async (dispatch, getState) => {
   }
 };
 
-export const resetPassword = (data) => async (dispatch, getState) => {
+export const resetPassword = (info) => async (dispatch, getState) => {
   try {
     dispatch(setLoading(true)); // Set loading state
-    const res = await axios.post(
+    const { data } = await axios.post(
       `${basePath}/auth/reset-password`,
-      { ...data },
+      { ...info },
       {
         headers: {
           "content-type": "application/json",
@@ -123,7 +123,9 @@ export const resetPassword = (data) => async (dispatch, getState) => {
         },
       }
     );
-    console.log(res, "Password reset successful");
+
+    dispatch(setUser(data.user));
+    console.log(data.user, "Password reset successful");
   } catch (err) {
     console.error("Error resetting password:", err);
     dispatch(
