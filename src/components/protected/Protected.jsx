@@ -10,6 +10,16 @@ const Protected = ({ children }) => {
       router.push("/loginPage");
     }
   }, []);
-  return <div>{user ? { children } : "loading"}</div>;
+  return (
+    <div>
+      {user ? (
+        { children }
+      ) : (
+        <div className="w-[100vw] h-[100vh] flex items-center justify-center">
+          <GridLoader color="#36d7b7"></GridLoader>
+        </div>
+      )}
+    </div>
+  );
 };
 export default Protected;

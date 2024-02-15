@@ -378,7 +378,9 @@ const ProductDetails = () => {
             </div>
           </div>
         ) : (
-          <div>Loading......</div>
+          <div className="w-[100vw] h-[100vh] flex items-center justify-center">
+            <GridLoader color="#36d7b7"></GridLoader>
+          </div>
         )}
       </div>
     </IsLoggin>

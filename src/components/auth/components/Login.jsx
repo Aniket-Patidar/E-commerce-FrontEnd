@@ -43,7 +43,7 @@ const Login = () => {
   return (
     <div>
       {loadingUser ? (
-        <div><GridLoader  color="#36d7b7"></GridLoader></div>
+        <div className="w-[100vw] h-[100vh] flex items-center justify-center"><GridLoader  color="#36d7b7"></GridLoader></div>
       ) : (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
