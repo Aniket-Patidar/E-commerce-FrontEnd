@@ -21,6 +21,7 @@ export const createUser = (userInfo) => async (dispatch, getState) => {
       { ...userInfo },
       { headers: { "content-type": "application/json" } }
     );
+    console.log(data,"===");
     localStorage.setItem("token", data.token);
     dispatch(setUser(data.user));
   } catch (err) {

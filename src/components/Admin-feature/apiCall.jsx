@@ -27,7 +27,6 @@ export const getAllProducts = () => async (dispatch, getState) => {
     dispatch(setProduct(data));
   } catch (err) {
     dispatch(setError(err.message));
-    console.log(err, "Error");
   }
 };
 
@@ -82,7 +81,6 @@ export const getAllCategories = () => async (dispatch, getState) => {
     dispatch(setCategories(data.msg));
   } catch (err) {
     dispatch(setError(err.message));
-    console.log(err, "Error");
   }
 };
 
