@@ -9,17 +9,18 @@ import {
 
 const basePath = process.env.NEXT_PUBLIC_REACT_APP_API_URL;
 
-export const createAddTOCard = (data) => async (dispatch, getState) => {
+export const createAddTOCard = (info) => async (dispatch, getState) => {
   dispatch(setLoadingCard(true));
 
   try {
-    const res = await axios.post(`${basePath}/cart`, data, {
+    const { data } = await axios.post(`${basePath}/cart`, info, {
       headers: {
         authorization: `${localStorage.getItem("token")} `,
         headers: { "content-type": "application/json" },
       },
     });
-    dispatch(setMyCard(res.data));
+    console.log(data, "==");
+    dispatch(setMyCard(data));
   } catch (err) {
     console.log(err, "Error");
     dispatch(setError(err.message));
@@ -32,13 +33,14 @@ export const getUserAllCard = (userId) => async (dispatch, getState) => {
   dispatch(setLoadingCard(true));
 
   try {
-    const res = await axios.get(`${basePath}/cart`, {
+    const { data } = await axios.get(`${basePath}/cart`, {
       headers: {
         "content-type": "application/json",
         authorization: `${localStorage.getItem("token")} `,
       },
     });
-    dispatch(setAllCard(res.data));
+    console.log();
+    dispatch(setAllCard(data));
   } catch (err) {
     console.log(err, "Error");
     dispatch(setError(err.message));

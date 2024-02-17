@@ -13,16 +13,18 @@ import {
 } from "@/components/card/ApiCall";
 import { useForm } from "react-hook-form";
 import { AycSetOrder } from "@/components/order/apiCall";
-import { userAddressUpdate } from "@/components/auth/apiCall";
+import { getUserInfo, userAddressUpdate } from "@/components/auth/apiCall";
 import Card from "@/components/card/Card";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const CheackOutPage = () => {
   const [open, setOpen] = useState(true);
   const { allCard: items } = useSelector((state) => state.Card);
   const { user } = useSelector((state) => state.User);
+  console.log(user, "lala");
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -45,12 +47,7 @@ const CheackOutPage = () => {
     e.preventDefault();
     dispatch(removeItem(item.id));
   }
-  /* handel update qty */
-  // function handelUpdate(e, item) {
-  //   dispatch(updateItem({ ...item, quantity: e.target.value }));
-  // }
 
-  /* handel form */
   const {
     register,
     handleSubmit,
@@ -65,30 +62,84 @@ const CheackOutPage = () => {
   });
 
   const [Address, setAddress] = useState();
-  const [payment, setPayment] = useState("cash");
+  const [payment, setPayment] = useState("");
   const { currentOrder } = useSelector((state) => state.Order);
+
+  console.log(items, "===");
+  /* Razor Pay  paymentHandler*/
+
+  const paymentHandler = async () => {
+    if (!user || !items) return;
+    if (!Address) {
+      toast.error("please select address");
+      return;
+    }
+
+    const {
+      data: { order },
+    } = await axios.post(
+      "http://localhost:8080/orders/checkout",
+      {
+        amount: totalPrice,
+      },
+      {
+        headers: {
+          "content-type": "application/json",
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    const options = {
+      key: "rzp_test_nTBvOTLgE6fNLn",
+      amount: order.amount,
+      currency: "INR",
+      name: "E-commerce",
+      description: "Tutorial of RazorPay",
+      image: "https://avatars.githubusercontent.com/u/25058652?v=4",
+      order_id: order.id,
+      callback_url: "http://localhost:8080/orders/paymentverification",
+      prefill: {
+        name: "Gaurav Kumar",
+        email: "gaurav.kumar@example.com",
+        contact: "9999999999",
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#121212",
+      },
+    };
+    const razor = new window.Razorpay(options);
+    razor.open();
+  };
 
   /* handelOrder */
   function handelOrder(e) {
     if (!Address) {
       toast.error("please select address");
+      return;
+    }
+    if (!payment) {
+      toast.error("please select Payment Method");
+      return;
     }
 
-    if (Address) {
-      const orderDetails = {
-        user: user?.id,
-        items,
-        selectedAddress: Address,
-        totalAmount: totalItem,
-        totalItems: totalPrice,
-        paymentMethod: payment,
-      };
+    const orderDetails = {
+      user: user?.id,
+      items,
+      selectedAddress: Address,
+      totalAmount: totalItem,
+      totalItems: totalPrice,
+      paymentMethod: payment,
+    };
 
-      dispatch(AycSetOrder(orderDetails));
-
-      items.forEach((element) => {
-        dispatch(removeItem(element?.id));
-      });
+    dispatch(AycSetOrder(orderDetails));
+    items.forEach((element) => {
+      dispatch(removeItem(element?.id));
+    });
+    if (currentOrder?.id && currentOrder?.paymentMethod == "cash") {
       router.push("/OderSuccessfull/" + currentOrder?.id);
     }
   }
@@ -537,7 +588,7 @@ const CheackOutPage = () => {
                 </div>
                 <div className="mt-6">
                   <div
-                    onClick={handelOrder}
+                    onClick={payment == "cash" ? handelOrder : paymentHandler}
                     className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                   >
                     order
